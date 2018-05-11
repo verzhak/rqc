@@ -16,7 +16,7 @@ class CEdgeKeyCompare
 {
 	public:
 
-		inline bool operator()(const TEdgeKey & key_1, const TEdgeKey & key_2)
+		inline bool operator() (const TEdgeKey & key_1, const TEdgeKey & key_2) const
 		{
 			return 
 				(key_1.first->name() < key_2.first->name())

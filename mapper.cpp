@@ -92,20 +92,19 @@ CPath CMapper::get_path(const CNode * n1, const CNode * n2)
 	return path;
 }
 
+const CNode * CMapper::get_next_node_in_path(const CNode * n_from, const CNode * n_to)
+{
+	return _map[TEdgeKey(n_to, n_from)].next_node;
+}
+
 void CMapper::refresh_map()
 {
 	const unsigned num = _nodes.size();
 	const unsigned num_2 = num * num;
-	unique_ptr<unsigned []> path_sizes = make_unique<unsigned []>(num_2);
-	unique_ptr<int []> prev_nodes = make_unique<int []>(num_2);
+	vector<unsigned> path_sizes(num_2, UINT_MAX);
+	vector<int> prev_nodes(num_2, -1);
 	vector<string> keys;
 	unsigned v, u, k;
-
-	for(v = 0; v < num_2; v++)
-	{
-		path_sizes[v] = UINT_MAX;
-		prev_nodes[v] = -1;
-	}
 
 	for(auto & n : _nodes)
 		keys.push_back(n.first);

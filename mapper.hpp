@@ -119,8 +119,22 @@ class CMapper
 
 		  \param n1, n2 - указатели на описатели оконечных нод
 
+		  \return описатель маршрута
+
 		*/
 		CPath get_path(const CNode * n1, const CNode * n2);
+
+		/*!
+
+		  \brief Получение следующей вершины в кратчайшем маршруте между ребрами в текущей таблице маршрутизации
+
+		  \param n_from - стартовая нода
+		  \param n_to - конечная нода
+
+		  \return указатель на следующую ноду, в которую нужно перейти из n1
+
+		*/
+		const CNode * get_next_node_in_path(const CNode * n_from, const CNode * n_to);
 
 		friend ostream & operator<<(ostream & stream, const CMapper & mapper);
 };

@@ -9,10 +9,8 @@
 
 using namespace testing;
 
-TEST(CMapper, all)
+void mapper_init(CMapper & mapper)
 {
-	CMapper mapper;
-
 	auto A = mapper.add_node("A");
 	auto B = mapper.add_node("B");
 	auto C = mapper.add_node("C");
@@ -28,8 +26,15 @@ TEST(CMapper, all)
 	mapper.add_edge(D, E, 3);
 
 	mapper.refresh_map();
+}
 
-	auto path = mapper.get_path(A, D);
+TEST(CMapper, get_path)
+{
+	CMapper mapper;
+
+	mapper_init(mapper);
+
+	auto path = mapper.get_path(mapper.get_node("A"), mapper.get_node("D"));
 
 	ASSERT_EQ(path.length(), 7);
 	ASSERT_EQ(path.nodes_num(), 5);
@@ -39,6 +44,27 @@ TEST(CMapper, all)
 	ASSERT_STREQ((* (path.begin() + 2))->name().c_str(), "C");
 	ASSERT_STREQ((* (path.begin() + 3))->name().c_str(), "B");
 	ASSERT_STREQ((* (path.begin() + 4))->name().c_str(), "A");
+}
+
+TEST(CMapper, get_next_node_in_path)
+{
+	CMapper mapper;
+
+	mapper_init(mapper);
+	
+	const CNode * next, * D = mapper.get_node("D");
+	
+	next = mapper.get_next_node_in_path(mapper.get_node("A"), D);
+	ASSERT_STREQ(next->name().c_str(), "B");
+
+	next = mapper.get_next_node_in_path(next, D);
+	ASSERT_STREQ(next->name().c_str(), "C");
+
+	next = mapper.get_next_node_in_path(next, D);
+	ASSERT_STREQ(next->name().c_str(), "E");
+
+	next = mapper.get_next_node_in_path(next, D);
+	ASSERT_STREQ(next->name().c_str(), "D");
 }
 
 #endif
